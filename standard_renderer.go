@@ -54,11 +54,14 @@ type standardRenderer struct {
 
 // newRenderer creates a new renderer. Normally you'll want to initialize it
 // with os.Stdout as the first argument.
-func newRenderer(out *termenv.Output, useANSICompressor bool) renderer {
+func newRenderer(out *termenv.Output, useANSICompressor bool, frameRate time.Duration) renderer {
+	if frameRate == 0 {
+		frameRate = defaultFramerate
+	}
 	r := &standardRenderer{
 		out:                out,
 		mtx:                &sync.Mutex{},
-		framerate:          defaultFramerate,
+		framerate:          frameRate,
 		useANSICompressor:  useANSICompressor,
 		queuedMessageLines: []string{},
 	}
